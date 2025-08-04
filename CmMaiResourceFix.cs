@@ -1,32 +1,37 @@
-﻿using System.Linq;
+﻿using System;
 using BepInEx;
+using BepInEx.Logging;
 using HarmonyLib;
 
 namespace cm_mai_resource_fix
 {
-
     [BepInPlugin("CmMaiResourceFix", "CmMaiResourceFix", "1.0.0.0")]
     public class CmMaiResourceFix : BaseUnityPlugin
     {
-        private readonly Harmony harmony = new Harmony("CmMaiResourceFix");
-
+        public static ManualLogSource logger;
+        
         void Awake()
         {
+            logger = Logger;
             Logger.LogInfo("Load Mod");
-            harmony.PatchAll();
-
-            var patchedMethods = harmony.GetPatchedMethods().ToList();
-            Logger.LogInfo($"Number of patched methods: {patchedMethods.Count}");
-
-            foreach (var method in patchedMethods)
-            {
-                Logger.LogInfo($"Patched method: {method.DeclaringType?.Name}.{method.Name}");
-            }
+            Patch(typeof(MaiResourcePatch));
         }
 
-        void OnDestroy()
+        private bool Patch(Type type, bool noLoggerPrint = false)
         {
-            harmony.UnpatchSelf();
+            try
+            {
+                Harmony.CreateAndPatchAll(type);
+                Logger.LogInfo($"Patch {type.Name}");
+                return true;
+            } catch (Exception e)
+            {
+                if (!noLoggerPrint)
+                {
+                    Logger.LogError($"Failed to patch {type.Name}: {e}");
+                }
+                return false;
+            }
         }
     }
 }
