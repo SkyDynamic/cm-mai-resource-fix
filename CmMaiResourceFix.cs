@@ -30,6 +30,7 @@ namespace cm_mai_resource_fix
             Patch(typeof(MaiResourcePatch));
             Patch(typeof(MaiRatingSpacingFix));
             Patch(typeof(CustomUserInfo));
+            Patch(typeof(IgnoreLoginVersion));
         }
 
         private void Update()
