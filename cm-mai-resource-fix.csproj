@@ -55,19 +55,21 @@
         <Reference Include="UnityEngine">
           <HintPath>libs\UnityEngine.dll</HintPath>
         </Reference>
+        <Reference Include="UnityEngine.UI">
+          <HintPath>libs\UnityEngine.UI.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="IgnoreLoginVersion.cs" />
+        <Compile Include="MaiRatingSpacingFix.cs" />
         <Compile Include="CmMaiResourceFix.cs" />
+        <Compile Include="CustomUserInfo.cs" />
         <Compile Include="MaiResourcePatch.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-         Other similar extension points exist, see Microsoft.Common.targets.
-    <Target Name="BeforeBuild">
-    </Target>
-    <Target Name="AfterBuild">
-    </Target>
-    -->
 
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;D:\sega\SDED\package\BepInEx\plugins&quot;" />
+    </Target>
 </Project>
